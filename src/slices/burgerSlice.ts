@@ -54,8 +54,7 @@ const burgerSlice = createSlice({
       })
       .addCase(fetchBurgers.fulfilled, (state, action) => {
         state.ingredients = action.payload;
-      })
-      .addCase(fetchBurgers.rejected, (state, action) => {});
+      });
   }
 });
 

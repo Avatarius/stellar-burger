@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { burgerReducer } from '../slices/burgerSlice';
+import { orderReducer } from '../slices/orderSlice';
+import { combineReducers } from '@reduxjs/toolkit';
 
 import {
   TypedUseSelectorHook,
@@ -7,12 +9,13 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-const rootReducer = burgerReducer;
+const rootReducer = combineReducers({
+  burgers: burgerReducer,
+  orders: orderReducer
+});
 
 const store = configureStore({
-  reducer: {
-    burgers: burgerReducer
-  },
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production'
 });
 

@@ -17,11 +17,13 @@ import { Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { fetchBurgers } from '../../slices/burgerSlice';
+import { fetchFeed } from '../../slices/orderSlice';
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchBurgers());
+    dispatch(fetchFeed());
   }, []);
 
   return (
@@ -31,6 +33,8 @@ const App = () => {
       <Routes>
         <Route path='/' element={<AppHeader />}>
           <Route index element={<ConstructorPage />} />
+          <Route path='/feed' element={<Feed />} />
+          <Route path='/profile' element={<Profile />} />
           {/* <Route path='/feed' element={<Feed />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
