@@ -13,14 +13,22 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { fetchBurgers } from '../../slices/burgerSlice';
 import { fetchFeed } from '../../slices/orderSlice';
+import { useNavigate } from 'react-router-dom';
+import { IngredientDetailsContainer } from '../ui/ingredient-details-container/ingredient-details-container';
 
 const App = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
+
+  console.log(location);
+
   useEffect(() => {
     dispatch(fetchBurgers());
     dispatch(fetchFeed());
@@ -30,9 +38,17 @@ const App = () => {
     <div className={styles.app}>
       {/* <AppHeader />
     <ConstructorPage /> */}
-      <Routes>
+      <Routes location={backgroundLocation || location}>
         <Route path='/' element={<AppHeader />}>
           <Route index element={<ConstructorPage />} />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <IngredientDetailsContainer>
+                <IngredientDetails />
+              </IngredientDetailsContainer>
+            }
+          />
           <Route path='/feed' element={<Feed />} />
           <Route path='/profile' element={<Profile />} />
           {/* <Route path='/feed' element={<Feed />} />
@@ -69,6 +85,18 @@ const App = () => {
           /> */}
         </Route>
       </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };

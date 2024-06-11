@@ -10,13 +10,11 @@ interface IOrderTotal {
 interface IOrderState {
   orders: TOrder[];
   totalData: IOrderTotal;
-  isLoading: boolean;
 }
 
 const initialState: IOrderState = {
   orders: [],
-  totalData: { total: 0, totalToday: 0 },
-  isLoading: false
+  totalData: { total: 0, totalToday: 0 }
 };
 
 const fetchFeed = createAsyncThunk('order/fetchAll', async () => getFeedsApi());
@@ -25,28 +23,20 @@ const orderSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    clearOrders: (state) => {
-      state.orders = [];
-      state.totalData = { total: 0, totalToday: 0 };
-      state.isLoading = false;
-    }
+    clearOrders: () => initialState
   },
   selectors: {
     selectOrders: (state) => state.orders,
     selectTotalData: (state) => state.totalData
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchFeed.pending, (state, action) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchFeed.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.totalData = {
-          total: action.payload.total,
-          totalToday: action.payload.totalToday
-        };
-      });
+    builder.addCase(fetchFeed.fulfilled, (state, action) => {
+      state.orders = action.payload.orders;
+      state.totalData = {
+        total: action.payload.total,
+        totalToday: action.payload.totalToday
+      };
+    });
   }
 });
 

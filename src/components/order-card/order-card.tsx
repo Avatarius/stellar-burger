@@ -49,8 +49,6 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
     };
   }, [order, ingredients]);
 
-  console.log(orderInfo);
-
   if (!orderInfo) return null;
 
   return (
