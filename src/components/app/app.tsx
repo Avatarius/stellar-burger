@@ -19,7 +19,8 @@ import { useDispatch } from '../../services/store';
 import { fetchBurgers } from '../../slices/burgerSlice';
 import { fetchFeed } from '../../slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
-import { IngredientDetailsContainer } from '../ui/ingredient-details-container/ingredient-details-container';
+import { getIdFromUrl } from '../../utils/getIdFromUrl';
+import { DetailsContainer } from '../ui/details-container/details-container';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,9 +45,17 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <IngredientDetailsContainer>
+              <DetailsContainer title='Детали ингредиента'>
                 <IngredientDetails />
-              </IngredientDetailsContainer>
+              </DetailsContainer>
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <DetailsContainer title={`#0${getIdFromUrl(location.pathname)}`}>
+                <OrderInfo />
+              </DetailsContainer>
             }
           />
           <Route path='/feed' element={<Feed />} />
@@ -92,6 +101,17 @@ const App = () => {
             element={
               <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal
+                title={`#0${getIdFromUrl(location.pathname)}`}
+                onClose={() => navigate('/feed')}
+              >
+                <OrderInfo />
               </Modal>
             }
           />
