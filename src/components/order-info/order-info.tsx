@@ -4,7 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
 import { selectOrders } from '../../slices/orderSlice';
-import { selectIngredients } from '../../slices/burgerSlice';
+import { selectIngredients } from '../../slices/ingredientsSlice';
 import { useLocation } from 'react-router-dom';
 import { getIdFromUrl } from '../../utils/getIdFromUrl';
 
@@ -27,8 +27,6 @@ export const OrderInfo: FC = () => {
   const ingredients: TIngredient[] = useSelector(selectIngredients).filter(
     (ingredient) => orderData?.ingredients.includes(ingredient._id)
   );
-
-  console.log(orderData);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

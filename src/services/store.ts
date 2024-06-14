@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { burgerReducer } from '../slices/burgerSlice';
+import { ingredientsReducer } from '../slices/ingredientsSlice';
 import { orderReducer } from '../slices/orderSlice';
+import { feedReducer } from '../slices/feedSlice';
+import { userReducer } from '../slices/userSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 
 import {
@@ -10,8 +12,10 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  burgers: burgerReducer,
-  orders: orderReducer
+  ingredients: ingredientsReducer,
+  feed: feedReducer,
+  orders: orderReducer,
+  user: userReducer
 });
 
 const store = configureStore({

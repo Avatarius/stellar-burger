@@ -9,23 +9,23 @@ interface IConstructorItems {
   ingredients: TConstructorIngredient[];
 }
 
-export interface IngredientListState {
+interface IngredientsState {
   isLoading: boolean;
   ingredients: TIngredient[];
   constructorItems: IConstructorItems;
 }
 
-const initialState: IngredientListState = {
+const initialState: IngredientsState = {
   isLoading: false,
   ingredients: [],
   constructorItems: { bun: null, ingredients: [] }
 };
-const fetchBurgers = createAsyncThunk('burgers/fetch', async () =>
+const fetchIngredients = createAsyncThunk('ingredients/fetch', async () =>
   getIngredientsApi()
 );
 
-const burgerSlice = createSlice({
-  name: 'burgers',
+const ingredientsSlice = createSlice({
+  name: 'ingredients',
   initialState,
   reducers: {
     addToConstructor: (state, action) => {
@@ -49,24 +49,25 @@ const burgerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBurgers.pending, (state, action) => {
+      .addCase(fetchIngredients.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(fetchBurgers.fulfilled, (state, action) => {
+      .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.ingredients = action.payload;
       });
   }
 });
 
-const burgerReducer = burgerSlice.reducer;
-const { selectIngredients, selectConstructorItems } = burgerSlice.selectors;
-const { addToConstructor, removeFromConstructor } = burgerSlice.actions;
+const ingredientsReducer = ingredientsSlice.reducer;
+const { selectIngredients, selectConstructorItems } =
+  ingredientsSlice.selectors;
+const { addToConstructor, removeFromConstructor } = ingredientsSlice.actions;
 
 export {
-  burgerReducer,
+  ingredientsReducer,
   selectIngredients,
   selectConstructorItems,
   addToConstructor,
   removeFromConstructor,
-  fetchBurgers
+  fetchIngredients
 };

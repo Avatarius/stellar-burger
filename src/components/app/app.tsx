@@ -16,24 +16,19 @@ import { Feed } from '@pages';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
-import { fetchBurgers } from '../../slices/burgerSlice';
-import { fetchFeed } from '../../slices/orderSlice';
+import { fetchIngredients } from '../../slices/ingredientsSlice';
+import { fetchFeed } from '../../slices/feedSlice';
 import { useNavigate } from 'react-router-dom';
 import { getIdFromUrl } from '../../utils/getIdFromUrl';
 import { DetailsContainer } from '../ui/details-container/details-container';
+import { ProtectedRoute } from '../protectedRoute';
+import { checkUserAuth } from '../../slices/userSlice';
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
-
-  console.log(location);
-
-  useEffect(() => {
-    dispatch(fetchBurgers());
-    dispatch(fetchFeed());
-  }, []);
 
   return (
     <div className={styles.app}>
@@ -59,7 +54,31 @@ const App = () => {
             }
           />
           <Route path='/feed' element={<Feed />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route
+            path='/profile'
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/login'
+            element={
+              <ProtectedRoute onlyOnAuth>
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/register' element={<Register />} />
+          <Route
+            path='/profile/orders'
+            element={
+              <ProtectedRoute>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
+          />
           {/* <Route path='/feed' element={<Feed />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />

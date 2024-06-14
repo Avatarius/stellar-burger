@@ -1,47 +1,65 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getFeedsApi } from '@api';
-
-interface IOrderTotal {
-  total: number;
-  totalToday: number;
-}
+import { getOrdersApi, orderBurgerApi } from '@api';
+import { getCookie } from '../utils/cookie';
 
 interface IOrderState {
   orders: TOrder[];
-  totalData: IOrderTotal;
+  orderRequest: boolean;
+  newOrder: TOrder | null;
 }
 
 const initialState: IOrderState = {
   orders: [],
-  totalData: { total: 0, totalToday: 0 }
+  orderRequest: false,
+  newOrder: null
 };
 
-const fetchFeed = createAsyncThunk('order/fetchAll', async () => getFeedsApi());
+const fetchOrders = createAsyncThunk('order/fetch', async () => getOrdersApi());
+
+const orderBurger = createAsyncThunk(
+  'order/create',
+  async (id_array: string[]) => orderBurgerApi(id_array)
+);
 
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    clearOrders: () => initialState
+    setOrderRequest: (state, action) => {
+      state.orderRequest = action.payload;
+    }
   },
   selectors: {
     selectOrders: (state) => state.orders,
-    selectTotalData: (state) => state.totalData
+    selectNewOrder: (state) => state.newOrder,
+    selectOrderRequest: (state) => state.orderRequest
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchFeed.fulfilled, (state, action) => {
-      state.orders = action.payload.orders;
-      state.totalData = {
-        total: action.payload.total,
-        totalToday: action.payload.totalToday
-      };
-    });
+    builder
+      .addCase(orderBurger.pending, (state) => {
+        state.orderRequest = true;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.orders = action.payload;
+      })
+      .addCase(orderBurger.fulfilled, (state, action) => {
+        state.newOrder = action.payload.order;
+      });
   }
 });
 
 const orderReducer = orderSlice.reducer;
-const { selectOrders, selectTotalData } = orderSlice.selectors;
-const { clearOrders } = orderSlice.actions;
+const { selectOrders, selectNewOrder, selectOrderRequest } =
+  orderSlice.selectors;
+const { setOrderRequest } = orderSlice.actions;
 
-export { orderReducer, fetchFeed, selectOrders, selectTotalData, clearOrders };
+export {
+  orderReducer,
+  fetchOrders,
+  orderBurger,
+  selectOrders,
+  selectOrderRequest,
+  selectNewOrder,
+  setOrderRequest
+};
