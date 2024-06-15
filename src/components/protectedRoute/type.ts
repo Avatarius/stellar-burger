@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  onlyOnAuth?: boolean;
+  onlyUnAuth?: boolean;
 }
 
 export type { ProtectedRouteProps };

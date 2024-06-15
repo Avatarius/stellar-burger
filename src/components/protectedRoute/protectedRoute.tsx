@@ -9,25 +9,20 @@ import {
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 
-const ProtectedRoute: FC<ProtectedRouteProps> = ({ onlyOnAuth, children }) => {
+const ProtectedRoute: FC<ProtectedRouteProps> = ({ onlyUnAuth, children }) => {
   const isAuthChecked = useSelector(selectIsAuthChecked);
   const user = useSelector(selectUserData);
   const location = useLocation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(checkUserAuth());
-  }, []);
 
   if (!isAuthChecked) {
     return <Preloader />;
   }
 
-  if (!onlyOnAuth && !user) {
+  if (!onlyUnAuth && !user) {
     return <Navigate replace to='/login' state={{ from: location }} />;
   }
 
-  if (onlyOnAuth && user) {
+  if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} />;
   }

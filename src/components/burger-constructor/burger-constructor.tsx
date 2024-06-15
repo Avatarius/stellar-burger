@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from '../../services/store';
 import { selectConstructorItems } from '../../slices/ingredientsSlice';
 import {
   selectOrderRequest,
-  setOrderRequest,
   orderBurger,
-  selectNewOrder
+  selectNewOrder,
+  clearNewOrder,
+  setOrderRequest
 } from '../../slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
@@ -31,6 +32,7 @@ export const BurgerConstructor: FC = () => {
     if (!constructorItems.bun || orderRequest) return;
   };
   const closeOrderModal = () => {
+    dispatch(clearNewOrder());
     dispatch(setOrderRequest(false));
   };
 

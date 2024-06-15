@@ -16,8 +16,6 @@ import { Feed } from '@pages';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
-import { fetchIngredients } from '../../slices/ingredientsSlice';
-import { fetchFeed } from '../../slices/feedSlice';
 import { useNavigate } from 'react-router-dom';
 import { getIdFromUrl } from '../../utils/getIdFromUrl';
 import { DetailsContainer } from '../ui/details-container/details-container';
@@ -29,6 +27,9 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -65,12 +66,19 @@ const App = () => {
           <Route
             path='/login'
             element={
-              <ProtectedRoute onlyOnAuth>
+              <ProtectedRoute onlyUnAuth>
                 <Login />
               </ProtectedRoute>
             }
           />
-          <Route path='/register' element={<Register />} />
+          <Route
+            path='/register'
+            element={
+              <ProtectedRoute onlyUnAuth>
+                <Register />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path='/profile/orders'
             element={

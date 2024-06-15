@@ -16,17 +16,21 @@ import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
 
 interface UserState {
+  request: boolean;
   isAuthChecked: boolean;
   data: TUser | null;
-  loginUserError: SerializedError | null;
-  registerUserError: SerializedError | null;
+  loginError: string;
+  registerError: string;
+  updateError: string;
 }
 
 const initialState: UserState = {
+  request: false,
   isAuthChecked: false,
   data: null,
-  loginUserError: null,
-  registerUserError: null
+  loginError: '',
+  registerError: '',
+  updateError: ''
 };
 
 const getUser = createAsyncThunk('user/get', async () => getUserApi());
@@ -63,14 +67,28 @@ const loginUser = createAsyncThunk(
 );
 
 const logoutUser = createAsyncThunk('user/logout', async (_, { dispatch }) =>
-  logoutApi().then(() => {
-    dispatch(userLogout());
-  })
+  logoutApi()
+    .then(() => {
+      localStorage.clear();
+      deleteCookie('accessToken');
+      dispatch(userLogout());
+    })
+    .catch(() => {
+      console.log('Ошибка выполнения выхода');
+    })
 );
 
 const registerUser = createAsyncThunk(
   'user/register',
-  async (data: TRegisterData) => registerUserApi(data)
+  async (data: TRegisterData, { rejectWithValue }) => {
+    const register_data = await registerUserApi(data);
+    if (!register_data.success) {
+      rejectWithValue(register_data);
+    }
+    setCookie('accessToken', register_data.accessToken);
+    localStorage.setItem('refreshToken', register_data.refreshToken);
+    return register_data.user;
+  }
 );
 
 const userSlice = createSlice({
@@ -82,43 +100,82 @@ const userSlice = createSlice({
     },
     userLogout: (state) => {
       state.data = null;
-      state.loginUserError = null;
     }
   },
   selectors: {
     selectUserData: (state) => state.data,
     selectIsAuthChecked: (state) => state.isAuthChecked,
-    selectLoginUserError: (state) => state.loginUserError
+    selectRequest: (state) => state.request,
+    selectLoginError: (state) => state.loginError,
+    selectRegisterError: (state) => state.registerError,
+    selectUpdateError: (state) => state.updateError
   },
   extraReducers: (builder) => {
     builder
-
+      .addCase(loginUser.pending, (state) => {
+        state.request = true;
+      })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthChecked = true;
-        state.loginUserError = action.error;
+        state.loginError = action.error.message || '';
+        state.request = false;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.data = action.payload;
+        state.request = false;
+        state.loginError = '';
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.request = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.request = false;
+      })
+      .addCase(logoutUser.rejected, (state) => {
+        state.request = false;
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.request = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.registerUserError = action.error;
+        state.registerError = action.error.message || '';
+        state.request = false;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.data = action.payload.user;
+        state.data = action.payload;
+        state.request = false;
+      })
+      .addCase(checkUserAuth.pending, (state) => {
+        state.loginError = '';
+        state.registerError = '';
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.data = action.payload.user;
       })
+      .addCase(updateUser.pending, (state) => {
+        state.request = true;
+      })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.data = action.payload.user;
+        state.request = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.request = false;
+        state.updateError = action.error.message || '';
       });
   }
 });
 
 const userReducer = userSlice.reducer;
-const { selectUserData, selectIsAuthChecked, selectLoginUserError } =
-  userSlice.selectors;
+const {
+  selectUserData,
+  selectIsAuthChecked,
+  selectRequest,
+  selectLoginError,
+  selectRegisterError,
+  selectUpdateError
+} = userSlice.selectors;
 const { authChecked, userLogout } = userSlice.actions;
 
 export {
@@ -130,5 +187,8 @@ export {
   updateUser,
   selectUserData,
   selectIsAuthChecked,
-  selectLoginUserError
+  selectRequest,
+  selectLoginError,
+  selectRegisterError,
+  selectUpdateError
 };

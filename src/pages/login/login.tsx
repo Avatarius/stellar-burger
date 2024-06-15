@@ -1,12 +1,18 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { loginUser, selectLoginUserError } from '../../slices/userSlice';
+import {
+  loginUser,
+  selectLoginError,
+  selectRequest
+} from '../../slices/userSlice';
+import { Preloader } from '@ui';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const errorText = useSelector(selectLoginUserError)?.message || '';
+  const error = useSelector(selectLoginError);
+  const request = useSelector(selectRequest);
 
   const dispatch = useDispatch();
   const handleSubmit = (e: SyntheticEvent) => {
@@ -14,9 +20,13 @@ export const Login: FC = () => {
     dispatch(loginUser({ email, password }));
   };
 
+  if (request) {
+    return <Preloader />;
+  }
+
   return (
     <LoginUI
-      errorText={errorText}
+      errorText={error}
       email={email}
       setEmail={setEmail}
       password={password}

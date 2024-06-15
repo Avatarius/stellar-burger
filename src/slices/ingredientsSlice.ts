@@ -45,21 +45,26 @@ const ingredientsSlice = createSlice({
   },
   selectors: {
     selectIngredients: (state) => state.ingredients,
-    selectConstructorItems: (state) => state.constructorItems
+    selectConstructorItems: (state) => state.constructorItems,
+    selectIsLoading: (state) => state.isLoading
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state, action) => {
+      .addCase(fetchIngredients.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.ingredients = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchIngredients.rejected, (state) => {
+        state.isLoading = false;
       });
   }
 });
 
 const ingredientsReducer = ingredientsSlice.reducer;
-const { selectIngredients, selectConstructorItems } =
+const { selectIngredients, selectConstructorItems, selectIsLoading } =
   ingredientsSlice.selectors;
 const { addToConstructor, removeFromConstructor } = ingredientsSlice.actions;
 
@@ -67,6 +72,7 @@ export {
   ingredientsReducer,
   selectIngredients,
   selectConstructorItems,
+  selectIsLoading,
   addToConstructor,
   removeFromConstructor,
   fetchIngredients

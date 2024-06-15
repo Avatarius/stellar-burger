@@ -3,7 +3,7 @@ import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useSelector } from '../../services/store';
-import { selectOrders } from '../../slices/orderSlice';
+import { selectFeedOrders } from '../../slices/feedSlice';
 import { selectIngredients } from '../../slices/ingredientsSlice';
 import { useLocation } from 'react-router-dom';
 import { getIdFromUrl } from '../../utils/getIdFromUrl';
@@ -21,7 +21,7 @@ export const OrderInfo: FC = () => {
   }; */
   const location = useLocation();
   const orderId = getIdFromUrl(location.pathname);
-  const orders = useSelector(selectOrders);
+  const orders = useSelector(selectFeedOrders);
   const orderData = orders.find((order) => order.number.toString() === orderId);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients).filter(
