@@ -8,11 +8,12 @@ import {
 } from '../../services/slices/burgerConstructor';
 
 import {
-  orderBurger,
   selectOrder,
   selectRequest,
   clearOrder
 } from '../../services/slices/order';
+
+import { orderBurger } from '../../services/thunk/order';
 
 import { useNavigate } from 'react-router-dom';
 import { selectUserData } from '../../services/slices/user';

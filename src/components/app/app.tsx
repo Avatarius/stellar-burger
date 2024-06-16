@@ -21,7 +21,8 @@ import { DetailsContainer } from '../ui/details-container/details-container';
 import { ProtectedRoute } from '../protectedRoute';
 import { fetchIngredients } from '../../services/slices/ingredients';
 import { fetchFeed } from '../../services/slices/feed';
-import { checkUserAuth } from '../../services/slices/user';
+import { checkUserAuth } from '../../services/thunk/user';
+import { clearOrder } from '../../services/slices/order';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -122,7 +123,13 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Детали ингредиента' onClose={() => navigate('/')}>
+              <Modal
+                title='Детали ингредиента'
+                onClose={() => {
+                  navigate('/');
+                  dispatch(clearOrder());
+                }}
+              >
                 <IngredientDetails />
               </Modal>
             }
@@ -130,7 +137,13 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title={`#0${id}`} onClose={() => navigate('/feed')}>
+              <Modal
+                title={`#0${id}`}
+                onClose={() => {
+                  navigate('/feed');
+                  dispatch(clearOrder());
+                }}
+              >
                 <OrderInfo />
               </Modal>
             }
@@ -140,7 +153,10 @@ const App = () => {
             element={
               <Modal
                 title={`#0${id}`}
-                onClose={() => navigate('/profile/orders')}
+                onClose={() => {
+                  navigate('/profile/orders');
+                  dispatch(clearOrder());
+                }}
               >
                 <OrderInfo />
               </Modal>

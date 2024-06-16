@@ -1,6 +1,6 @@
-import { getFeedsApi } from '@api';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
+import { fetchFeed } from '../thunk/feed';
 
 interface IFeedState {
   orders: TOrder[];
@@ -17,15 +17,6 @@ const initialState: IFeedState = {
     totalToday: 0
   }
 };
-
-const fetchFeed = createAsyncThunk(
-  'order/fetchAll',
-  async (_, { dispatch }) => {
-    dispatch(clearFeed());
-    const data = await getFeedsApi();
-    return data;
-  }
-);
 
 const feedSlice = createSlice({
   name: 'feed',
@@ -57,5 +48,6 @@ export {
   fetchFeed,
   selectFeedOrders,
   selectTotalData,
-  selectFeed
+  selectFeed,
+  clearFeed
 };

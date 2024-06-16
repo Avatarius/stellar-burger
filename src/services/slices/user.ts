@@ -1,16 +1,13 @@
-import {
-  TLoginData,
-  TRegisterData,
-  getUserApi,
-  updateUserApi,
-  loginUserApi,
-  logoutApi,
-  registerUserApi,
-  resetPasswordApi
-} from '@api';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
+import {
+  checkUserAuth,
+  getUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+  updateUser
+} from '../thunk/user';
 
 interface UserState {
   request: boolean;
@@ -29,69 +26,6 @@ const initialState: UserState = {
   registerError: '',
   updateError: ''
 };
-
-const getUser = createAsyncThunk('user/get', async () => getUserApi());
-
-const checkUserAuth = createAsyncThunk(
-  'user/checkAuth',
-  async (_, { dispatch }) => {
-    if (getCookie('accessToken')) {
-      dispatch(getUser()).finally(() => {
-        dispatch(authChecked());
-      });
-    } else {
-      dispatch(authChecked());
-    }
-  }
-);
-
-const updateUser = createAsyncThunk(
-  'user/update',
-  async (newData: Partial<TRegisterData>) => updateUserApi(newData)
-);
-
-const loginUser = createAsyncThunk(
-  'user/login',
-  async (loginData: TLoginData, { rejectWithValue }) => {
-    const data = await loginUserApi(loginData);
-    if (!data.success) {
-      return rejectWithValue(data);
-    }
-    setCookie('accessToken', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    return data.user;
-  }
-);
-
-const logoutUser = createAsyncThunk('user/logout', async (_, { dispatch }) =>
-  logoutApi()
-    .then(() => {
-      localStorage.clear();
-      deleteCookie('accessToken');
-      dispatch(userLogout());
-    })
-    .catch(() => {
-      console.log('Ошибка выполнения выхода');
-    })
-);
-
-const registerUser = createAsyncThunk(
-  'user/register',
-  async (data: TRegisterData, { rejectWithValue }) => {
-    const register_data = await registerUserApi(data);
-    if (!register_data.success) {
-      rejectWithValue(register_data);
-    }
-    setCookie('accessToken', register_data.accessToken);
-    localStorage.setItem('refreshToken', register_data.refreshToken);
-    return register_data.user;
-  }
-);
-
-const resetPassword = createAsyncThunk(
-  'user/resetPassword',
-  async (data: { password: string; token: string }) => resetPasswordApi(data)
-);
 
 const userSlice = createSlice({
   name: 'user',
@@ -183,16 +117,13 @@ const { authChecked, userLogout } = userSlice.actions;
 export {
   userSlice,
   userReducer,
-  loginUser,
   registerUser,
-  logoutUser,
-  checkUserAuth,
-  updateUser,
-  resetPassword,
   selectUserData,
   selectIsAuthChecked,
   selectRequest,
   selectLoginError,
   selectRegisterError,
-  selectUpdateError
+  selectUpdateError,
+  authChecked,
+  userLogout
 };

@@ -1,6 +1,6 @@
-import { getOrderByNumberApi, orderBurgerApi } from '@api';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
+import { getOrderByNumber, orderBurger } from '../thunk/order';
 
 interface IOrderState {
   data: TOrder | null;
@@ -11,23 +11,6 @@ const initialState: IOrderState = {
   data: null,
   request: false
 };
-
-const getOrderByNumber = createAsyncThunk(
-  'order/getByNumber',
-  async (orderNumber: number, { dispatch }) => {
-    dispatch(clearOrder());
-    return getOrderByNumberApi(orderNumber);
-  }
-);
-
-const orderBurger = createAsyncThunk(
-  'order/create',
-  async (id_array: string[], { dispatch }) => {
-    dispatch(clearOrder());
-    const data = await orderBurgerApi(id_array);
-    return data;
-  }
-);
 
 const orderSlice = createSlice({
   name: 'order',
@@ -70,12 +53,4 @@ const orderReducer = orderSlice.reducer;
 const { selectOrder, selectRequest } = orderSlice.selectors;
 const { clearOrder } = orderSlice.actions;
 
-export {
-  orderSlice,
-  clearOrder,
-  orderBurger,
-  orderReducer,
-  selectOrder,
-  selectRequest,
-  getOrderByNumber
-};
+export { orderSlice, clearOrder, orderReducer, selectOrder, selectRequest };

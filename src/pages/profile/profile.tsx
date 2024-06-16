@@ -6,7 +6,7 @@ import {
   selectUserData
 } from '../../services/slices/user';
 import { useSelector, useDispatch } from '../../services/store';
-import { updateUser } from '../../services/slices/user';
+import { updateUser } from '../../services/thunk/user';
 import { Preloader } from '@ui';
 
 export const Profile: FC = () => {

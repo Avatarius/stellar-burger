@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getOrdersApi, orderBurgerApi, getOrderByNumberApi } from '@api';
+import { fetchOrders } from '../thunk/orders';
 
 interface IOrdersState {
   orders: TOrder[];
@@ -11,8 +11,6 @@ const initialState: IOrdersState = {
   orders: [],
   request: false
 };
-
-const fetchOrders = createAsyncThunk('order/fetch', async () => getOrdersApi());
 
 const ordersSlice = createSlice({
   name: 'orders',

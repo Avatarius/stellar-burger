@@ -4,8 +4,9 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredients';
-import { useLocation, useParams } from 'react-router-dom';
-import { getOrderByNumber, selectOrder } from '../../services/slices/order';
+import { useParams } from 'react-router-dom';
+import { selectOrder } from '../../services/slices/order';
+import { getOrderByNumber } from '../../services/thunk/order';
 
 export const OrderInfo: FC = () => {
   const orderId = Number(useParams().number);
