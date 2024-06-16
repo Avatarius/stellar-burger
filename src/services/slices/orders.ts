@@ -79,6 +79,7 @@ const { clearNewOrder, clearCurrentOrder, setOrderRequest } =
   orderSlice.actions;
 
 export {
+  orderSlice,
   orderReducer,
   clearNewOrder,
   setOrderRequest,

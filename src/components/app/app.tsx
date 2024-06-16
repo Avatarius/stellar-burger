@@ -19,10 +19,10 @@ import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { DetailsContainer } from '../ui/details-container/details-container';
 import { ProtectedRoute } from '../protectedRoute';
-import { fetchIngredients } from '../../slices/ingredientsSlice';
-import { fetchFeed } from '../../slices/feedSlice';
-import { checkUserAuth } from '../../slices/userSlice';
-import { fetchOrders } from '../../slices/orderSlice';
+import { fetchIngredients } from '../../services/slices/ingredients';
+import { fetchFeed } from '../../services/slices/feed';
+import { checkUserAuth } from '../../services/slices/userSlice';
+import { fetchOrders } from '../../services/slices/orders';
 
 const App = () => {
   const dispatch = useDispatch();

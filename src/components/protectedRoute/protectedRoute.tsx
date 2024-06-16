@@ -5,10 +5,10 @@ import {
   checkUserAuth,
   selectIsAuthChecked,
   selectUserData
-} from '../../slices/userSlice';
+} from '../../services/slices/userSlice';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
-import { fetchOrders } from '../../slices/orderSlice';
+import { fetchOrders } from '../../services/slices/orders';
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ onlyUnAuth, children }) => {
   const isAuthChecked = useSelector(selectIsAuthChecked);

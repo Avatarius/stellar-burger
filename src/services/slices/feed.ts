@@ -18,13 +18,20 @@ const initialState: IFeedState = {
   }
 };
 
-const fetchFeed = createAsyncThunk('order/fetchAll', async () => getFeedsApi());
+const fetchFeed = createAsyncThunk(
+  'order/fetchAll',
+  async (_, { dispatch }) => {
+    dispatch(clearFeed());
+    const data = await getFeedsApi();
+    return data;
+  }
+);
 
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    clearFeed: (state) => initialState
+    clearFeed: () => initialState
   },
   selectors: {
     selectFeedOrders: (state) => state.orders,
@@ -45,8 +52,8 @@ const { selectFeedOrders, selectTotalData, selectFeed } = feedSlice.selectors;
 const { clearFeed } = feedSlice.actions;
 
 export {
+  feedSlice,
   feedReducer,
-  clearFeed,
   fetchFeed,
   selectFeedOrders,
   selectTotalData,

@@ -15,7 +15,7 @@ import {
   SerializedError
 } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
-import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 
 interface UserState {
   request: boolean;
@@ -186,6 +186,7 @@ const {
 const { authChecked, userLogout } = userSlice.actions;
 
 export {
+  userSlice,
   userReducer,
   loginUser,
   registerUser,

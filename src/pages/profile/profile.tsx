@@ -4,11 +4,11 @@ import {
   selectRequest,
   selectUpdateError,
   selectUserData
-} from '../../slices/userSlice';
+} from '../../services/slices/userSlice';
 import { useSelector, useDispatch } from '../../services/store';
-import { updateUser } from '../../slices/userSlice';
+import { updateUser } from '../../services/slices/userSlice';
 import { Preloader } from '@ui';
-import { fetchOrders } from '../../slices/orderSlice';
+import { fetchOrders } from '../../services/slices/orders';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */

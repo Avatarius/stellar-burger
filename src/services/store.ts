@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { ingredientsReducer } from '../slices/ingredientsSlice';
-import { orderReducer } from '../slices/orderSlice';
-import { feedReducer } from '../slices/feedSlice';
-import { userReducer } from '../slices/userSlice';
+import { ingredientsSlice } from './slices/ingredients';
+import { orderSlice } from './slices/orders';
+import { feedSlice } from './slices/feed';
+import { userSlice } from './slices/userSlice';
+import { burgerConstructorSlice } from './slices/burgerConstructor';
 import { combineReducers } from '@reduxjs/toolkit';
 
 import {
@@ -12,10 +13,11 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  ingredients: ingredientsReducer,
-  feed: feedReducer,
-  orders: orderReducer,
-  user: userReducer
+  [ingredientsSlice.name]: ingredientsSlice.reducer,
+  [feedSlice.name]: feedSlice.reducer,
+  [orderSlice.name]: orderSlice.reducer,
+  [userSlice.name]: userSlice.reducer,
+  [burgerConstructorSlice.name]: burgerConstructorSlice.reducer
 });
 
 const store = configureStore({
@@ -24,7 +26,6 @@ const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-// export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
