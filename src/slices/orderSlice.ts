@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { getOrdersApi, orderBurgerApi } from '@api';
-import { getCookie } from '../utils/cookie';
+import { getOrdersApi, orderBurgerApi, getOrderByNumberApi } from '@api';
 
 interface IOrderState {
   orders: TOrder[];
   request: boolean;
+  currentOrder: TOrder | null;
   newOrder: TOrder | null;
 }
 
 const initialState: IOrderState = {
   orders: [],
   request: false,
+  currentOrder: null,
   newOrder: null
 };
 
@@ -22,6 +23,14 @@ const orderBurger = createAsyncThunk(
   async (id_array: string[]) => orderBurgerApi(id_array)
 );
 
+const getOrderByNumber = createAsyncThunk(
+  'order/getByNumber',
+  async (orderNumber: number, { dispatch }) => {
+    dispatch(clearCurrentOrder());
+    return getOrderByNumberApi(orderNumber);
+  }
+);
+
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
@@ -29,12 +38,16 @@ const orderSlice = createSlice({
     clearNewOrder: (state) => {
       state.newOrder = null;
     },
+    clearCurrentOrder: (state) => {
+      state.currentOrder = null;
+    },
     setOrderRequest: (state, action) => {
       state.request = action.payload;
     }
   },
   selectors: {
     selectOrders: (state) => state.orders,
+    selectCurrentOrder: (state) => state.currentOrder,
     selectNewOrder: (state) => state.newOrder,
     selectOrderRequest: (state) => state.request
   },
@@ -52,14 +65,18 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.currentOrder = action.payload.orders[0];
       });
   }
 });
 
 const orderReducer = orderSlice.reducer;
-const { selectOrders, selectNewOrder, selectOrderRequest } =
+const { selectOrders, selectCurrentOrder, selectNewOrder, selectOrderRequest } =
   orderSlice.selectors;
-const { clearNewOrder, setOrderRequest } = orderSlice.actions;
+const { clearNewOrder, clearCurrentOrder, setOrderRequest } =
+  orderSlice.actions;
 
 export {
   orderReducer,
@@ -67,7 +84,9 @@ export {
   setOrderRequest,
   fetchOrders,
   orderBurger,
+  getOrderByNumber,
   selectOrders,
   selectOrderRequest,
+  selectCurrentOrder,
   selectNewOrder
 };

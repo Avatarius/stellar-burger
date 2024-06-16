@@ -8,6 +8,7 @@ import {
 import { useSelector, useDispatch } from '../../services/store';
 import { updateUser } from '../../slices/userSlice';
 import { Preloader } from '@ui';
+import { fetchOrders } from '../../slices/orderSlice';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */

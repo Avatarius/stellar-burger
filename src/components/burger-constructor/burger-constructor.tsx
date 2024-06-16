@@ -6,9 +6,9 @@ import { selectConstructorItems } from '../../slices/ingredientsSlice';
 import {
   selectOrderRequest,
   orderBurger,
-  selectNewOrder,
   clearNewOrder,
-  setOrderRequest
+  setOrderRequest,
+  selectNewOrder
 } from '../../slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {

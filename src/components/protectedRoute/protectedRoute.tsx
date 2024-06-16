@@ -8,11 +8,19 @@ import {
 } from '../../slices/userSlice';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
+import { fetchOrders } from '../../slices/orderSlice';
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ onlyUnAuth, children }) => {
   const isAuthChecked = useSelector(selectIsAuthChecked);
   const user = useSelector(selectUserData);
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchOrders());
+    }
+  });
 
   if (!isAuthChecked) {
     return <Preloader />;

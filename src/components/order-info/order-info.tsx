@@ -1,12 +1,11 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { useSelector } from '../../services/store';
-import { selectFeedOrders } from '../../slices/feedSlice';
+import { useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../slices/ingredientsSlice';
-import { useLocation } from 'react-router-dom';
-import { getIdFromUrl } from '../../utils/getIdFromUrl';
+import { useLocation, useParams } from 'react-router-dom';
+import { getOrderByNumber, selectCurrentOrder } from '../../slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
@@ -20,9 +19,14 @@ export const OrderInfo: FC = () => {
     number: 0
   }; */
   const location = useLocation();
-  const orderId = getIdFromUrl(location.pathname);
-  const orders = useSelector(selectFeedOrders);
-  const orderData = orders.find((order) => order.number.toString() === orderId);
+  const orderId = Number(useParams().number);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getOrderByNumber(orderId));
+  }, []);
+
+  const orderData = useSelector(selectCurrentOrder);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients).filter(
     (ingredient) => orderData?.ingredients.includes(ingredient._id)
@@ -31,7 +35,6 @@ export const OrderInfo: FC = () => {
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
-
     const date = new Date(orderData.createdAt);
 
     type TIngredientsWithCount = {

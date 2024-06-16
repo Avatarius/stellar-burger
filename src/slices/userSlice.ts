@@ -5,7 +5,9 @@ import {
   updateUserApi,
   loginUserApi,
   logoutApi,
-  registerUserApi
+  registerUserApi,
+  forgotPasswordApi,
+  resetPasswordApi
 } from '@api';
 import {
   createSlice,
@@ -89,6 +91,11 @@ const registerUser = createAsyncThunk(
     localStorage.setItem('refreshToken', register_data.refreshToken);
     return register_data.user;
   }
+);
+
+const resetPassword = createAsyncThunk(
+  'user/resetPassword',
+  async (data: { password: string; token: string }) => resetPasswordApi(data)
 );
 
 const userSlice = createSlice({
@@ -185,6 +192,7 @@ export {
   logoutUser,
   checkUserAuth,
   updateUser,
+  resetPassword,
   selectUserData,
   selectIsAuthChecked,
   selectRequest,

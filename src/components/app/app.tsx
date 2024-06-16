@@ -13,28 +13,32 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { getIdFromUrl } from '../../utils/getIdFromUrl';
 import { DetailsContainer } from '../ui/details-container/details-container';
 import { ProtectedRoute } from '../protectedRoute';
+import { fetchIngredients } from '../../slices/ingredientsSlice';
+import { fetchFeed } from '../../slices/feedSlice';
 import { checkUserAuth } from '../../slices/userSlice';
+import { fetchOrders } from '../../slices/orderSlice';
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
+  const id = location.pathname.split('/').at(-1);
+
   useEffect(() => {
+    dispatch(fetchIngredients());
+    dispatch(fetchFeed());
     dispatch(checkUserAuth());
   }, []);
 
   return (
     <div className={styles.app}>
-      {/* <AppHeader />
-    <ConstructorPage /> */}
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<AppHeader />}>
           <Route index element={<ConstructorPage />} />
@@ -49,7 +53,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <DetailsContainer title={`#0${getIdFromUrl(location.pathname)}`}>
+              <DetailsContainer title={`#0${id}`}>
                 <OrderInfo />
               </DetailsContainer>
             }
@@ -80,6 +84,22 @@ const App = () => {
             }
           />
           <Route
+            path='/forgot-password'
+            element={
+              <ProtectedRoute onlyUnAuth>
+                <ForgotPassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/reset-password'
+            element={
+              <ProtectedRoute onlyUnAuth>
+                <ResetPassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path='/profile/orders'
             element={
               <ProtectedRoute>
@@ -87,38 +107,15 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          {/* <Route path='/feed' element={<Feed />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/profile/orders' element={<ProfileOrders />} />
-          <Route path='*' element={<NotFound404 />} />
-          <Route
-            path='/feed/:number'
-            element={
-              <Modal title='test' onClose={() => console.log('clsoe')}>
-                <OrderInfo />
-              </Modal>
-            }
-          />
-          <Route
-            path='/ingredients/:id'
-            element={
-              <Modal title='test' onClose={() => console.log('clsoe')}>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='test' onClose={() => console.log('clsoe')}>
-                <IngredientDetails />
-              </Modal>
+              <DetailsContainer title={`#0${id}`}>
+                <OrderInfo />
+              </DetailsContainer>
             }
-          /> */}
+          />
+          <Route path='*' element={<NotFound404 />} />
         </Route>
       </Routes>
       {backgroundLocation && (
@@ -134,9 +131,17 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
+              <Modal title={`#0${id}`} onClose={() => navigate('/feed')}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={
               <Modal
-                title={`#0${getIdFromUrl(location.pathname)}`}
-                onClose={() => navigate('/feed')}
+                title={`#0${id}`}
+                onClose={() => navigate('/profile/orders')}
               >
                 <OrderInfo />
               </Modal>
