@@ -4,18 +4,12 @@ import {
   selectRequest,
   selectUpdateError,
   selectUserData
-} from '../../services/slices/userSlice';
+} from '../../services/slices/user';
 import { useSelector, useDispatch } from '../../services/store';
-import { updateUser } from '../../services/slices/userSlice';
+import { updateUser } from '../../services/slices/user';
 import { Preloader } from '@ui';
-import { fetchOrders } from '../../services/slices/orders';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  /* const user = {
-    name: '',
-    email: ''
-  }; */
   const dispatch = useDispatch();
   const user = useSelector(selectUserData);
   const request = useSelector(selectRequest);
@@ -75,6 +69,4 @@ export const Profile: FC = () => {
       updateUserError={updateError}
     />
   );
-
-  return null;
 };

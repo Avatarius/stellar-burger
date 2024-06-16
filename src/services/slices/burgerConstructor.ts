@@ -40,7 +40,8 @@ const burgerConstructorSlice = createSlice({
         1,
         state.ingredients[indexA]
       )[0];
-    }
+    },
+    clearConstructor: () => initialState
   },
   selectors: {
     selectConstructorsItems: (state) => state
@@ -49,8 +50,12 @@ const burgerConstructorSlice = createSlice({
 
 const burgerConstructorReducer = burgerConstructorSlice.reducer;
 const { selectConstructorsItems } = burgerConstructorSlice.selectors;
-const { addToConstructor, removeFromConstructor, reorderConstructor } =
-  burgerConstructorSlice.actions;
+const {
+  addToConstructor,
+  removeFromConstructor,
+  reorderConstructor,
+  clearConstructor
+} = burgerConstructorSlice.actions;
 
 export {
   burgerConstructorSlice,
@@ -58,5 +63,6 @@ export {
   selectConstructorsItems,
   addToConstructor,
   removeFromConstructor,
-  reorderConstructor
+  reorderConstructor,
+  clearConstructor
 };

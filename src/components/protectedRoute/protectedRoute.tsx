@@ -2,10 +2,9 @@ import { FC, useEffect } from 'react';
 import { ProtectedRouteProps } from './type';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  checkUserAuth,
   selectIsAuthChecked,
   selectUserData
-} from '../../services/slices/userSlice';
+} from '../../services/slices/user';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 import { fetchOrders } from '../../services/slices/orders';

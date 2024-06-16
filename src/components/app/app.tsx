@@ -13,7 +13,7 @@ import styles from './app.module.css';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
-import { Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
@@ -21,8 +21,7 @@ import { DetailsContainer } from '../ui/details-container/details-container';
 import { ProtectedRoute } from '../protectedRoute';
 import { fetchIngredients } from '../../services/slices/ingredients';
 import { fetchFeed } from '../../services/slices/feed';
-import { checkUserAuth } from '../../services/slices/userSlice';
-import { fetchOrders } from '../../services/slices/orders';
+import { checkUserAuth } from '../../services/slices/user';
 
 const App = () => {
   const dispatch = useDispatch();

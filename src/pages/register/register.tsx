@@ -5,7 +5,7 @@ import {
   registerUser,
   selectRegisterError,
   selectRequest
-} from '../../services/slices/userSlice';
+} from '../../services/slices/user';
 import { Preloader } from '@ui';
 
 export const Register: FC = () => {

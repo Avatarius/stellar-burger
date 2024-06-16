@@ -6,14 +6,9 @@ import {
   loginUserApi,
   logoutApi,
   registerUserApi,
-  forgotPasswordApi,
   resetPasswordApi
 } from '@api';
-import {
-  createSlice,
-  createAsyncThunk,
-  SerializedError
-} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
 

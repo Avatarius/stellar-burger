@@ -5,23 +5,9 @@ import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredients';
 import { useLocation, useParams } from 'react-router-dom';
-import {
-  getOrderByNumber,
-  selectCurrentOrder
-} from '../../services/slices/orders';
+import { getOrderByNumber, selectOrder } from '../../services/slices/order';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  /* const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  }; */
-  const location = useLocation();
   const orderId = Number(useParams().number);
   const dispatch = useDispatch();
 
@@ -29,7 +15,7 @@ export const OrderInfo: FC = () => {
     dispatch(getOrderByNumber(orderId));
   }, []);
 
-  const orderData = useSelector(selectCurrentOrder);
+  const orderData = useSelector(selectOrder);
 
   const ingredients: TIngredient[] = useSelector(selectIngredients).filter(
     (ingredient) => orderData?.ingredients.includes(ingredient._id)
