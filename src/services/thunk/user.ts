@@ -10,7 +10,7 @@ import {
 } from '@api';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { deleteCookie, getCookie, setCookie } from '../../utils/cookie';
-import { authChecked, userLogout } from '../slices/user';
+import { authChecked } from '../slices/user';
 
 const getUser = createAsyncThunk('user/get', async () => getUserApi());
 
@@ -45,17 +45,7 @@ const loginUser = createAsyncThunk(
   }
 );
 
-const logoutUser = createAsyncThunk('user/logout', async (_, { dispatch }) =>
-  logoutApi()
-    .then(() => {
-      localStorage.clear();
-      deleteCookie('accessToken');
-      dispatch(userLogout());
-    })
-    .catch(() => {
-      console.log('Ошибка выполнения выхода');
-    })
-);
+const logoutUser = createAsyncThunk('user/logout', async () => logoutApi());
 
 const registerUser = createAsyncThunk(
   'user/register',

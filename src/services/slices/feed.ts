@@ -45,7 +45,6 @@ const { clearFeed } = feedSlice.actions;
 export {
   feedSlice,
   feedReducer,
-  fetchFeed,
   selectFeedOrders,
   selectTotalData,
   selectFeed,

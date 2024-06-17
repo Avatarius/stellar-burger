@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { DetailsContainer } from '../ui/details-container/details-container';
 import { ProtectedRoute } from '../protectedRoute';
 import { fetchIngredients } from '../../services/slices/ingredients';
-import { fetchFeed } from '../../services/slices/feed';
+import { fetchFeed } from '../../services/thunk/feed';
 import { checkUserAuth } from '../../services/thunk/user';
 import { clearOrder } from '../../services/slices/order';
 
@@ -33,7 +33,6 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(fetchFeed());
     dispatch(checkUserAuth());
   }, []);
 

@@ -8,6 +8,7 @@ import {
   registerUser,
   updateUser
 } from '../thunk/user';
+import { deleteCookie } from '../../utils/cookie';
 
 interface UserState {
   request: boolean;
@@ -33,9 +34,6 @@ const userSlice = createSlice({
   reducers: {
     authChecked: (state) => {
       state.isAuthChecked = true;
-    },
-    userLogout: (state) => {
-      state.data = null;
     }
   },
   selectors: {
@@ -67,9 +65,13 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.request = false;
+        localStorage.clear();
+        deleteCookie('accessToken');
+        state.data = null;
       })
       .addCase(logoutUser.rejected, (state) => {
         state.request = false;
+        console.log('Ошибка выполнения выхода');
       })
       .addCase(registerUser.pending, (state) => {
         state.request = true;
@@ -112,7 +114,7 @@ const {
   selectRegisterError,
   selectUpdateError
 } = userSlice.selectors;
-const { authChecked, userLogout } = userSlice.actions;
+const { authChecked } = userSlice.actions;
 
 export {
   userSlice,
@@ -124,6 +126,5 @@ export {
   selectLoginError,
   selectRegisterError,
   selectUpdateError,
-  authChecked,
-  userLogout
+  authChecked
 };
