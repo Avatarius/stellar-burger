@@ -13,13 +13,6 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ onlyUnAuth, children }) => {
   const isAuthChecked = useSelector(selectIsAuthChecked);
   const user = useSelector(selectUserData);
   const location = useLocation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchOrders());
-    }
-  });
 
   if (!isAuthChecked) {
     return <Preloader />;
