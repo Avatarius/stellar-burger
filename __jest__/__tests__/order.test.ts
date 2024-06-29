@@ -3,9 +3,9 @@ import {
   initialState,
   clearOrder,
   orderReducer
-} from '../src/services/slices/order';
-import { currentOrder, newOrder } from '../src/utils/test-constants';
-import { getOrderByNumber, orderBurger } from '../src/services/thunk/order';
+} from '../../src/services/slices/order';
+import { currentOrder, newOrder } from '../test-constants';
+import { getOrderByNumber, orderBurger } from '../../src/services/thunk/order';
 
 describe('[OrderSlice]', () => {
   describe('Проверка синхронных экшнов', () => {

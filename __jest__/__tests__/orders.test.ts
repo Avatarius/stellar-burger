@@ -1,7 +1,7 @@
 import { expect, describe } from '@jest/globals';
-import {initialState, orderReducer, setOrderRequest} from '../src/services/slices/orders';
-import { fetchOrders } from '../src/services/slices/orders';
-import { orderList } from '../src/utils/test-constants';
+import {initialState, orderReducer, setOrderRequest} from '../../src/services/slices/orders';
+import { fetchOrders } from '../../src/services/slices/orders';
+import { orderList } from '../test-constants';
 
 describe('[OrdersSlice]', () => {
   describe('Проверка синхронных экшнов', () => {

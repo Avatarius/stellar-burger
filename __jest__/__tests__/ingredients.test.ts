@@ -1,7 +1,7 @@
 import { expect, describe } from '@jest/globals';
-import {initialState, ingredientsReducer} from '../src/services/slices/ingredients';
-import {fetchIngredients} from '../src/services/thunk/ingredients';
-import { ingredientsFullState } from '../src/utils/test-constants';
+import {initialState, ingredientsReducer} from '../../src/services/slices/ingredients';
+import {fetchIngredients} from '../../src/services/thunk/ingredients';
+import { ingredientsFullState } from '../test-constants';
 
 describe('[IngredientsSlice]', () => {
   describe('Проверка асинхронных экшнов', () => {

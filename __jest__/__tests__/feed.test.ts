@@ -1,8 +1,8 @@
 import { expect, describe } from '@jest/globals';
-import { clearFeed, feedReducer } from '../src/services/slices/feed';
-import {fetchFeed} from '../src/services/thunk/feed';
-import { initialState } from '../src/services/slices/feed';
-import {feedFullState} from '../src/utils/test-constants';
+import { clearFeed, feedReducer } from '../../src/services/slices/feed';
+import {fetchFeed} from '../../src/services/thunk/feed';
+import { initialState } from '../../src/services/slices/feed';
+import {feedFullState} from '../test-constants';
 
 
 describe('[FeedSlice]', () => {
