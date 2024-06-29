@@ -10,6 +10,8 @@ const config: JestConfigWithTsJest = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
+  verbose: true,
+  testEnvironment: 'jsdom',
   moduleNameMapper: {
       "^@pages": "<rootDir>/src/pages",
       "^@components": "<rootDir>/src/components",

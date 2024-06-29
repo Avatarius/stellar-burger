@@ -4,18 +4,14 @@ import { fetchFeed } from '../thunk/feed';
 
 interface IFeedState {
   orders: TOrder[];
-  totalData: {
-    total: number;
-    totalToday: number;
-  };
+  total: number;
+  totalToday: number;
 }
 
 const initialState: IFeedState = {
   orders: [],
-  totalData: {
-    total: 0,
-    totalToday: 0
-  }
+  total: 0,
+  totalToday: 0
 };
 
 const feedSlice = createSlice({
@@ -26,14 +22,17 @@ const feedSlice = createSlice({
   },
   selectors: {
     selectFeedOrders: (state) => state.orders,
-    selectTotalData: (state) => state.totalData,
+    selectTotalData: (state) => ({
+      total: state.total,
+      totalToday: state.totalToday
+    }),
     selectFeed: (state) => state
   },
   extraReducers: (builder) => {
     builder.addCase(fetchFeed.fulfilled, (state, action) => {
       state.orders = action.payload.orders;
-      state.totalData.total = action.payload.total;
-      state.totalData.totalToday = action.payload.totalToday;
+      state.total = action.payload.total;
+      state.totalToday = action.payload.totalToday;
     });
   }
 });
@@ -43,6 +42,7 @@ const { selectFeedOrders, selectTotalData, selectFeed } = feedSlice.selectors;
 const { clearFeed } = feedSlice.actions;
 
 export {
+  initialState,
   feedSlice,
   feedReducer,
   selectFeedOrders,

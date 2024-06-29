@@ -39,6 +39,7 @@ const ingredientsReducer = ingredientsSlice.reducer;
 const { selectIngredients, selectIsLoading } = ingredientsSlice.selectors;
 
 export {
+  initialState,
   ingredientsSlice,
   ingredientsReducer,
   selectIngredients,

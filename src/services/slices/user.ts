@@ -117,6 +117,7 @@ const {
 const { authChecked } = userSlice.actions;
 
 export {
+  initialState,
   userSlice,
   userReducer,
   registerUser,
