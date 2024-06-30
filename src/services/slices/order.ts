@@ -53,4 +53,11 @@ const orderReducer = orderSlice.reducer;
 const { selectOrder, selectRequest } = orderSlice.selectors;
 const { clearOrder } = orderSlice.actions;
 
-export { orderSlice, clearOrder, orderReducer, selectOrder, selectRequest };
+export {
+  initialState,
+  orderSlice,
+  clearOrder,
+  orderReducer,
+  selectOrder,
+  selectRequest
+};

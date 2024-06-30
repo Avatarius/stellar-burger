@@ -36,6 +36,7 @@ const { selectOrders, selectOrdersRequest } = ordersSlice.selectors;
 const { setOrderRequest } = ordersSlice.actions;
 
 export {
+  initialState,
   ordersSlice,
   orderReducer,
   setOrderRequest,
